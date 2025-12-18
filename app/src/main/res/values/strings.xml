@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Simple Text Echo App</string>
+    <string name="title_text_echo">Text Echo</string>
+    <string name="placeholder_input_text">Enter text to validate</string>
+    <string name="label_validate_text">Validate your text</string>
+    <string name="action_submit">Submit</string>
+    <string name="action_submitting">Submitting…</string>
+    <string name="status_success">Success</string>
+    <string name="msg_validation_success">Your text was validated successfully.</string>
+    <string name="title_result">Result</string>
+    <string name="action_copy">Copy</string>
+    <string name="cd_result_success">Successful result</string>
+</resources>

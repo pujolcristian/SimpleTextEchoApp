@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.joist.echo.domain.usecase.ValidateTextUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,9 +29,8 @@ internal class EchoViewModel @Inject constructor(
     private val validateStringUseCase: ValidateTextUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(EchoUiState())
-    val uiState = _uiState.asStateFlow()
-
+    var uiState = MutableStateFlow(EchoUiState())
+        private set
 
     fun onEvent(event: EchoEvent) {
         when (event) {
@@ -42,20 +40,20 @@ internal class EchoViewModel @Inject constructor(
     }
 
     private fun handleInputChange(newValue: String) {
-        _uiState.value = _uiState.value.copy(input = newValue, error = null)
+        uiState.update { it.copy(input = newValue, error = null) }
     }
 
     private fun handleSubmit() = viewModelScope.launch {
-        if (_uiState.value.isLoading) return@launch
-        _uiState.update { it.copy(isLoading = true, result = null, error = null) }
+        if (uiState.value.isLoading) return@launch
+        uiState.update { it.copy(isLoading = true, result = null, error = null) }
 
         val result = runCatching {
-            validateStringUseCase(_uiState.value.input)
+            validateStringUseCase(uiState.value.input)
         }
 
         result.fold(
             onSuccess = {
-                _uiState.update { currentState ->
+                uiState.update { currentState ->
                     currentState.copy(
                         isLoading = false,
                         result = it,
@@ -64,7 +62,7 @@ internal class EchoViewModel @Inject constructor(
                 }
             },
             onFailure = {
-                _uiState.update { currentState ->
+                uiState.update { currentState ->
                     currentState.copy(
                         isLoading = false,
                         result = null,

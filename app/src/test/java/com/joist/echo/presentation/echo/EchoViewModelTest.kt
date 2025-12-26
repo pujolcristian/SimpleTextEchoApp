@@ -32,7 +32,7 @@ class EchoViewModelTest {
             ValidateTextUseCase(echoRepository = SuccessEchoRepository(), ioDispatcher = dispatcher)
         val viewModel = EchoViewModel(validateStringUseCase = useCase)
 
-        viewModel.onInputChange("  hello  ")
+        viewModel.onEvent(EchoEvent.OnInputChange("  hello  "))
         val state = viewModel.uiState.value
         assertEquals("  hello  ", state.input)
         assertNull(state.error)
@@ -45,8 +45,8 @@ class EchoViewModelTest {
             ValidateTextUseCase(echoRepository = SuccessEchoRepository(), ioDispatcher = dispatcher)
         val viewModel = EchoViewModel(validateStringUseCase = useCase)
 
-        viewModel.onInputChange("  hello  ")
-        viewModel.onSubmit()
+        viewModel.onEvent(EchoEvent.OnInputChange("  hello  "))
+        viewModel.onEvent(EchoEvent.OnSubmit)
         advanceUntilIdle()
 
         val state = viewModel.uiState.value
@@ -62,8 +62,8 @@ class EchoViewModelTest {
             ValidateTextUseCase(echoRepository = FailingEchoRepository(), ioDispatcher = dispatcher)
         val viewModel = EchoViewModel(useCase)
 
-        viewModel.onInputChange("cause failure")
-        viewModel.onSubmit()
+        viewModel.onEvent(EchoEvent.OnInputChange("  hello  "))
+        viewModel.onEvent(EchoEvent.OnSubmit)
         advanceUntilIdle()
 
         val state = viewModel.uiState.value

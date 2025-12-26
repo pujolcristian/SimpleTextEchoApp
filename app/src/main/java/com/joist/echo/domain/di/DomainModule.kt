@@ -15,7 +15,7 @@ object DomainModule {
 
     @Provides
     @ViewModelScoped
-    internal fun provideValidateTextUseCase(
+    fun provideValidateTextUseCase(
         echoRepository: EchoRepository,
         @IoDispatcher ioDispatcher: CoroutineDispatcher,
     ): ValidateTextUseCase {
